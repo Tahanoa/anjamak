@@ -11,4 +11,6 @@ public interface TaskService {
     Task getTask(int id);
     Page<Task> getTasks(Pageable pageable);
     Page<Task> findByTitle(String title, Pageable pageable);
+    Page<Task> findByCompleted(boolean completed, Pageable pageable);
+
 }

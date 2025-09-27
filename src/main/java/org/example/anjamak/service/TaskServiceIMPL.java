@@ -1,0 +1,48 @@
+package org.example.anjamak.service;
+
+import org.example.anjamak.model.Task;
+import org.example.anjamak.repository.TaskRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+public class TaskServiceIMPL implements TaskService {
+    private final TaskRepository taskRepository;
+    public TaskServiceIMPL(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
+
+    @Override
+    public void addTask(Task task) {
+        taskRepository.save(task);
+    }
+
+    @Override
+    public void updateTask(Task task) {
+        taskRepository.save(task);
+    }
+
+    @Override
+    public void deleteTask(Task task) {
+        taskRepository.delete(task);
+    }
+
+    @Override
+    public Task getTask(int id) {
+        return taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task not found"));
+    }
+
+    @Override
+    public Page<Task> getTasks(Pageable pageable) {
+        return taskRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Task> findByTitle(String title, Pageable pageable) {
+        return taskRepository.findByTitleContaining(title, pageable);
+    }
+
+    @Override
+    public Page<Task> findByCompleted(boolean completed, Pageable pageable) {
+        return taskRepository.findByCompleted(completed, pageable);
+    }
+}
