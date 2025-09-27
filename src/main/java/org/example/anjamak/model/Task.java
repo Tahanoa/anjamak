@@ -22,9 +22,6 @@ public class Task {
 
     private boolean completed = false;
 
-    @Future(message = "dueDate.past")
-    private LocalDateTime dueDate;
-
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
@@ -56,15 +53,6 @@ public class Task {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
-    }
-
-    @CreationTimestamp
-    public LocalDateTime getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(LocalDateTime dueDate) {
-        this.dueDate = dueDate;
     }
 
     @CreationTimestamp
