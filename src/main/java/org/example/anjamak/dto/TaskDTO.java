@@ -4,50 +4,16 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.example.anjamak.model.Task;
 
-public class TaskDTO {
-    private int id;
-    private String title;
-    private String description;
-    private boolean completed;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Size(min = 3, max = 60, message = "title.size")
-    @NotBlank(message = "title.null")
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    @Size(max = 500, message = "description.size")
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
-    public Task connvertToTask() {
+public record TaskDTO(
+        @Size(min = 3, max = 60, message = "title.size")
+        @NotBlank(message = "title.null") String title,
+        @Size(max = 500, message = "description.size") String description
+) {
+    public Task convertToTask() {
         Task task = new Task();
         task.setTitle(title);
         task.setDescription(description);
-        task.setCompleted(completed);
+        task.setCompleted(false);
         return task;
     }
 }

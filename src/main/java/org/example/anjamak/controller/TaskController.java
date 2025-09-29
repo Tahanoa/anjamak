@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.example.anjamak.dto.TaskDTO;
 import org.example.anjamak.model.Task;
 import org.example.anjamak.service.TaskService;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -14,15 +15,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/tasks")
 public class TaskController {
     private final TaskService taskService;
-    public TaskController(TaskService taskService) {
+    private final MessageSourceAccessor messageSource;
+    public TaskController(TaskService taskService, MessageSourceAccessor messageSource) {
         this.taskService = taskService;
+        this.messageSource = messageSource;
     }
+
 
     @PostMapping("/addTask")
     public ResponseEntity<Object> addTask(@RequestBody @Valid TaskDTO task) {
         try {
-            taskService.addTask(task.connvertToTask());
-            return ResponseEntity.ok().body("Task.added.successfully");
+            taskService.addTask(task.convertToTask());
+            return ResponseEntity.ok().body(messageSource.getMessage("Task.added.successfully" ,"Task.added.successfully"  ));
         }catch (RuntimeException e) {
             return ResponseEntity.status(409).body(e.getMessage());
         }
@@ -44,7 +48,7 @@ public class TaskController {
             Page<Task> task = taskService.findByTitle(title, pageable);
             return ResponseEntity.ok(task);
         }catch (Exception e){
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(404).body("Task.not.found");
         }
     }
 
@@ -61,26 +65,33 @@ public class TaskController {
     public ResponseEntity<Object> delete(@PathVariable int id) {
         try {
             taskService.deleteTask(id);
-            return ResponseEntity.ok().body(null);
+            return ResponseEntity.ok().body(messageSource.getMessage("Task.deleted.successfully" , "Task.deleted.successfully"));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(409).body(null);
+            return ResponseEntity.status(409).body(e.getMessage());
         }
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<Object> update(@RequestBody @Valid TaskDTO taskDTO) {
-        try {
-            Task task = taskService.getTask(taskDTO.getId());
-            if (task == null) {
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Object> update(@PathVariable int id, @RequestBody @Valid TaskDTO taskDTO) {
+            Task existingTask = taskService.getTask(id);
+            if (existingTask == null) {
                 return ResponseEntity.status(404).body("Task.not.found");
             }
-            task.setTitle(taskDTO.getTitle());
-            task.setDescription(taskDTO.getDescription());
-            task.setCompleted(taskDTO.isCompleted());
-            taskService.updateTask(task);
-            return ResponseEntity.ok().body("Task.updated.successfully");
+
+            existingTask.setTitle(taskDTO.title());
+            existingTask.setDescription(taskDTO.description());
+
+            Task updatedTask = taskService.updateTask(existingTask);
+            return ResponseEntity.ok().body(messageSource.getMessage("Task.updated.successfully", "Task.updated.successfully"));
+    }
+
+    @PutMapping("/{id}/{completed}")
+    public ResponseEntity<Object> changeCompleted(@PathVariable int id, @PathVariable boolean completed) {
+        try {
+            taskService.changeCompleted(id, completed);
+            return ResponseEntity.ok().body(messageSource.getMessage("Task.updated.successfully"));
         } catch (RuntimeException e) {
-            return ResponseEntity.status(409).body("Task.not.found");
+            return ResponseEntity.status(404).body(e.getMessage());
         }
     }
 

@@ -47,4 +47,12 @@ public class TaskServiceIMPL implements TaskService {
     public Page<Task> findByCompleted(boolean completed, Pageable pageable) {
         return taskRepository.findByCompleted(completed, pageable);
     }
+
+    @Override
+    public void changeCompleted(int id, boolean completed) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Task.not.found"));
+        task.setCompleted(completed);
+        taskRepository.save(task);
+    }
 }
