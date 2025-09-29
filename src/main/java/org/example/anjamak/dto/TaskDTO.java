@@ -8,7 +8,7 @@ public class TaskDTO {
     private int id;
     private String title;
     private String description;
-    private boolean completed = false;
+    private boolean completed;
 
     public int getId() {
         return id;
@@ -18,6 +18,8 @@ public class TaskDTO {
         this.id = id;
     }
 
+    @Size(min = 3, max = 60, message = "title.size")
+    @NotBlank(message = "title.null")
     public String getTitle() {
         return title;
     }
@@ -25,7 +27,7 @@ public class TaskDTO {
     public void setTitle(String title) {
         this.title = title;
     }
-
+    @Size(max = 500, message = "description.size")
     public String getDescription() {
         return description;
     }

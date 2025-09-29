@@ -3,6 +3,7 @@ package org.example.anjamak.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -12,23 +13,19 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @NotBlank(message = "title.null")
-    @Size(min = 3, max = 60, message = "title.size")
     private String title;
-
-    @Size(max = 500, message = "description.size")
     private String description;
-
-    private boolean completed = false;
-
+    private boolean completed ;
     private LocalDateTime createdAt;
-
     private LocalDateTime updatedAt;
 
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -64,7 +61,7 @@ public class Task {
         this.createdAt = createdAt;
     }
 
-    @CreationTimestamp
+    @UpdateTimestamp
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }

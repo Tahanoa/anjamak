@@ -4,7 +4,9 @@ import org.example.anjamak.model.Task;
 import org.example.anjamak.repository.TaskRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TaskServiceIMPL implements TaskService {
     private final TaskRepository taskRepository;
     public TaskServiceIMPL(TaskRepository taskRepository) {
@@ -17,18 +19,18 @@ public class TaskServiceIMPL implements TaskService {
     }
 
     @Override
-    public void updateTask(Task task) {
-        taskRepository.save(task);
+    public Task updateTask(Task task) {
+        return taskRepository.save(task);
     }
 
     @Override
-    public void deleteTask(Task task) {
-        taskRepository.delete(task);
+    public void deleteTask(int id) {
+        taskRepository.deleteById(id);
     }
 
     @Override
     public Task getTask(int id) {
-        return taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task not found"));
+        return taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task.not.found"));
     }
 
     @Override
