@@ -80,7 +80,6 @@ async function loadTasks() {
     }
 }
 
-// تابع نمایش کارها در صفحه
 function renderTasks(tasks) {
     const container = document.getElementById('tasksContainer');
     console.log('نمایش کارها:', tasks);
@@ -123,7 +122,6 @@ function renderTasks(tasks) {
     }).join('');
 }
 
-// تابع نمایش وضعیت بارگذاری
 function showLoading() {
     const container = document.getElementById('tasksContainer');
     container.innerHTML = `
@@ -134,13 +132,11 @@ function showLoading() {
         `;
 }
 
-// تابع افزودن کار جدید
 async function addTask() {
     const title = document.getElementById('taskTitle').value.trim();
     const description = document.getElementById('taskDescription').value.trim();
     const submitBtn = document.getElementById('submitBtn');
 
-    // اعتبارسنجی سمت کلاینت
     if (title.length < 3 || title.length > 60) {
         showAlert('عنوان باید حداقل 3 و حداکثر 60 کاراکتر باشد!', 'error');
         return;
@@ -197,7 +193,6 @@ async function addTask() {
     }
 }
 
-// تابع حذف کار
 async function deleteTask(id) {
     if (!confirm('آیا از حذف این کار اطمینان دارید؟')) {
         return;
@@ -227,7 +222,6 @@ async function deleteTask(id) {
     }
 }
 
-// تابع تغییر وضعیت انجام کار
 async function toggleTaskCompletion(id, completed) {
     try {
         const response = await fetch(`${API_BASE_URL}/${id}/${completed}`, {
@@ -253,7 +247,6 @@ async function toggleTaskCompletion(id, completed) {
     }
 }
 
-// تابع باز کردن مودال ویرایش
 async function openEditModal(id) {
     currentEditingTaskId = id;
 
@@ -283,19 +276,16 @@ async function openEditModal(id) {
     }
 }
 
-// تابع بستن مودال ویرایش
 function closeEditModal() {
     document.getElementById('editModal').style.display = 'none';
     currentEditingTaskId = null;
     document.getElementById('editForm').reset();
 }
 
-// تابع به‌روزرسانی کار
 async function updateTask() {
     const title = document.getElementById('editTitle').value.trim();
     const description = document.getElementById('editDescription').value.trim();
 
-    // اعتبارسنجی سمت کلاینت
     if (title.length < 3 || title.length > 60) {
         showAlert('عنوان باید حداقل 3 و حداکثر 60 کاراکتر باشد!', 'error');
         return;
@@ -336,7 +326,6 @@ async function updateTask() {
     }
 }
 
-// تابع نمایش پیام
 function showAlert(message, type) {
     const alertContainer = document.getElementById('alertContainer');
     const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
@@ -347,15 +336,12 @@ function showAlert(message, type) {
 
     alertContainer.appendChild(alertDiv);
 
-    // حذف خودکار پیام بعد از 5 ثانیه
     setTimeout(() => {
         if (alertDiv.parentNode) {
             alertDiv.parentNode.removeChild(alertDiv);
         }
     }, 5000);
 }
-
-// تابع امن برای نمایش HTML
 function escapeHtml(unsafe) {
     if (!unsafe) return '';
     return unsafe
@@ -366,11 +352,9 @@ function escapeHtml(unsafe) {
         .replace(/'/g, "&#039;");
 }
 
-// تابع دیباگ - برای تست API
 function testAPI() {
     console.log('تست API...');
     loadTasks();
 }
 
-// تست خودکار هنگام بارگذاری
 setTimeout(testAPI, 1000);
