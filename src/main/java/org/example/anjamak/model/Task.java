@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "tasks")
 public class Task {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private int id;
     private String title;
     private String description;
@@ -19,11 +18,12 @@ public class Task {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-
     public void setId(int id) {
         this.id = id;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
